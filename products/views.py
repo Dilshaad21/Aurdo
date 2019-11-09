@@ -121,7 +121,7 @@ def Billing(p):
     for x in range(len(order)):
         total_price.append(quantity2[x]*cost_each[x])
 
-    bill={"Order":order,"Quantity":quantity2,"Price each":cost_each,"Total price":total_price}
+    bill={"Order":order,"Quantity":quantity2,"Price_each":cost_each,"Total_price":total_price}
     bill=pd.DataFrame(bill)    
     return bill,email2,name2
 
@@ -143,4 +143,5 @@ def yourbill(request):
             
             p=r.recognize_google(audio)
             items,email,name=Billing(p)
-            return render(request,'bill.html',context={"bill":name})    
+            summ=items['Total_price'].sum()
+            return render(request,'bill.html',context={"Name":name,"Email":email,'Items':items.to_dict('records'),"sum":summ})    

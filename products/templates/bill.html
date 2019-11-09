@@ -5,9 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
-    Bill Html
-    {{ bill }}
-  </body>
+    <h1 class="center">This is your bill</h1>
+    <h3>Mr.{{Name}}</h3>
+    <br>
+    <br>
+
+    <table class="table">
+      <thead>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price each</th>
+        <th scope="col">Total Price</th>
+      </thead>
+      <tbody>
+        {% for p in Items %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{ p.Order }}</td>
+          <td>{{ p.Quantity }}</td>
+          <td>{{ p.Price_each }}</td>
+          <td>{{ p.Total_price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+<h2> Grand Total : {{sum}}</h2>
+<a href="{% url 'products:menu' %}">Go back to menu</a>  
+</body>
 </html>
