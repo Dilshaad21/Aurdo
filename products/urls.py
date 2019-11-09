@@ -9,4 +9,5 @@ urlpatterns = [
     path('menu/', menu, name="menu"),
     path('purchase/', purchase, name="purchase"),
     path('your_bill/',yourbill,name="bill"),
+    path('sendmail/',sendmail,name="sendmail"),
 ]

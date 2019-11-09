@@ -14,9 +14,9 @@
   </head>
   <body>
     <h1 class="center">This is your bill</h1>
-    <h3>Mr.{{Name}}</h3>
-    <br>
-    <br>
+    <h3>Mr.{{ Name }}</h3>
+    <br />
+    <br />
 
     <table class="table">
       <thead>
@@ -38,7 +38,8 @@
         {% endfor %}
       </tbody>
     </table>
-<h2> Grand Total : {{sum}}</h2>
-<a href="{% url 'products:menu' %}">Go back to menu</a>  
-</body>
+    <h2>Grand Total : {{ sum }}</h2>
+    <a href="{% url 'products:menu' %}">Go back to menu</a>
+    <a href="{% url 'products:sendmail' %}">Send a Mail</a>
+  </body>
 </html>
