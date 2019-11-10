@@ -323,13 +323,13 @@ def update(txt):
             elif dataf3[x+1] in num and x+2<len(dataf3):
                 if dataf3[x+2] in df['name'].values:
                     if dataf3[x+2] in order:
-                        quantity[order.index(dataf3[x+2])]-=num.index(dataf2[x+1])                   
+                        quantity[order.index(dataf3[x+2])]-=num.index(dataf3[x+1])                   
                             
                         x+=2
             elif dataf3[x+1] in numw and x+2<len(dataf3):
                 if dataf3[x+2] in df['name'].values:
                     if dataf3[x+2] in order:
-                        quantity[order.index(dataf3[x+2])]-=numw.index(dataf2[x+1])    
+                        quantity[order.index(dataf3[x+2])]-=numw.index(dataf3[x+1])    
 
                         x+=2  
         x+=1            
@@ -404,10 +404,10 @@ def speech_to_text(request):
         total_price=[]
         for x in range(len(order)):
             total_price.append(quantity2[x]*cost_each[x])
-            bill={"Order":order,"Quantity":quantity2,"Price_each":cost_each,"Total_price":total_price}
-            items=pd.DataFrame(bill)    
-            summ=items["Total_price"].sum()
-            return render(request,'bill2.html',context={"Name":name2,"Email":email,'Items':items.to_dict('records'),"sum":summ}) 
+        bill={"Order":order,"Quantity":quantity2,"Price_each":cost_each,"Total_price":total_price}
+        items=pd.DataFrame(bill)    
+        summ=items["Total_price"].sum()
+        return render(request,'bill2.html',context={"Name":name2,"Email":email,'Items':items.to_dict('records'),"sum":summ}) 
 
 
     
