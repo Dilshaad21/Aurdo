@@ -7,9 +7,10 @@ import speech_recognition as sr
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from jinja2 import Template
 
 # Create your views here.
-
+dicti={}
 
 class Product(object):
     def __init__(self, x, y):
@@ -24,16 +25,16 @@ class Product(object):
 
 
 def index(request):
-    return render(request, 'index.html', context={"form": "forms"})
+    return render(request, 'index.html', context={"form": "forms","active":"active"})
 
 
 def menu(request):
     prod = Restaurant.objects.order_by("name")
-    return render(request, 'menu.html', context={"products": prod})
+    return render(request, 'menu.html', context={"products": prod,"menu":True,"active":"active"})
 
 
 def add_product(request):
-    Form_View = resForm()
+    form_View = resForm()
     if(request.method == "POST"):
         Form_View = resForm(request.POST)
         if(Form_View.is_valid()):
@@ -55,11 +56,11 @@ def add_product(request):
             df.to_csv("static/products.csv")
             df2.to_csv("static/productsduplicate.csv")
             print("Form submitted")
-            return render(request, 'forms.html', context={"form": Form_View, "addmore": "Product added successfully", "show": True})
+            return render(request, 'forms.html', context={"form": form_View, "addmore": "Product added successfully", "show": True,"add_product":True,"active":"active"})
         else:
             print("Form not valid")
     else:
-        return render(request, "forms.html", context={"form": Form_View, "show": False})
+        return render(request, "forms.html", context={"form": form_View, "show": False,"add_product":True,"active":"active"})
 
 
 not_name=['mobile','order','number','telephone','email','address']
@@ -129,14 +130,39 @@ def Billing(p):
     return bill,email2,name2
 
 
+
+def purchase(request):
+    Audio_view=Bill_View()
+    return render(request, 'purchase.html',context={"form":Bill_View,"purchase":True,"active":"active"})
+
+def yourbill(request):
+    Form_name=Bill_View()
+    if(request.method=="POST"):
+        Form_name=Bill_View(request.POST,request.FILES)
+        if(Form_name.is_valid()):
+            Form_name.save()
+            AUDIO_FILE='media/audio/Audio1.wav'
+            r=sr.Recognizer()
+            with sr.AudioFile(AUDIO_FILE) as source:
+                audio= r.record(source)
+            
+            p=r.recognize_google(audio)
+            items,email,name=Billing(p)
+            summ=items['Total_price'].sum()
+            global dicti
+            dicti={"Name":name,"Email":email,'Items':items.to_dict('records'),"sum":summ}
+            return render(request,'bill.html',context={"Name":name,"Email":email,'Items':items.to_dict('records'),"sum":summ}) 
+
+
 def sendmail(request):
-    sender_email = "dilshaadmuthalif21@gmail.com"
+    sender_email = "darkhorse2129@gmail.com"
     receiver_email = "dilshaadmuthalif21@gmail.com"
-    password = "herotime"
-    file=open('products/templates/bill.html')
+    password = "aquatropaz2129"
+    file=open('products/templates/billa.html')
     ff=file.read()
     file.close()
-    print(ff)
+    t=Template(ff)
+    htt=t.render(dicti)
     message = MIMEMultipart("alternative")
     message["Subject"] = "multipart test"
     message["From"] = sender_email
@@ -148,17 +174,7 @@ def sendmail(request):
     How are you?
     Real Python has many great tutorials:
     www.realpython.com"""
-    html = """\
-    <html>
-    <body>
-        <p>Hi,<br>
-        How are you?<br>
-        <a href="http://www.realpython.com">Real Python</a> 
-        has many great tutorials.
-        </p>
-    </body>
-    </html>
-    """
+    html = htt
 
     # Turn these into plain/html MIMEText objects
     part1 = MIMEText(text, "plain")
@@ -176,24 +192,5 @@ def sendmail(request):
         server.sendmail(
             sender_email, receiver_email, message.as_string()
         )
-
-
-def purchase(request):
-    Audio_view=Bill_View()
-    return render(request, 'purchase.html',context={"form":Bill_View})
-
-def yourbill(request):
-    Form_name=Bill_View()
-    if(request.method=="POST"):
-        Form_name=Bill_View(request.POST,request.FILES)
-        if(Form_name.is_valid()):
-            Form_name.save()
-            AUDIO_FILE='media/audio/Audio1.wav'
-            r=sr.Recognizer()
-            with sr.AudioFile(AUDIO_FILE) as source:
-                audio= r.record(source)
-            
-            p=r.recognize_google(audio)
-            items,email,name=Billing(p)
-            summ=items['Total_price'].sum()
-            return render(request,'bill.html',context={"Name":name,"Email":email,'Items':items.to_dict('records'),"sum":summ})    
+    return HttpResponse("Done!")
+   

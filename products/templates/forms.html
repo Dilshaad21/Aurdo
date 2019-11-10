@@ -1,68 +1,25 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a href="#"><img src="{% static '/wf.png' %}" height="30" width="30"/></a>
-      <a class="navbar-brand" href="#">Aurdo</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'products:add-product' %}"
-              >Add-Product</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'products:menu' %}">Menu</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'products:purchase' %}"
-              >Purchase <span class="sr-only">(current)</span></a
-            >
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <div class="jumbotron container" style="margin-top: 100px;">
-      <h3 style="text-align: center;">Add a new product</h3>
-      <br />
-      <form
-        action="/products/add_product/"
-        method="post"
-        style="text-align: center;"
-      >
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-      </form>
-      {% if show %}
-      <div class="alert alert-success" role="alert">
-        {{ addmore }}
-      </div>
-      {% else %} {% endif %}
-    </div>
-  </body>
-</html>
+{% load static %} {% include "./layout/navbar.html" %} {% block body %}
+<div class="jumbotron container" style="margin-top: 100px;">
+  <h3 style="text-align: center; color:black;font-size:40px;">
+    Add a new product
+  </h3>
+  <br />
+  <form
+    action="/products/add_product/"
+    method="post"
+    style="text-align: center;color:black;font-size:18px;"
+  >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <br />
+  <br />
+  {% if show %}
+  <div class="alert alert-success" role="alert">
+    {{ addmore }}
+  </div>
+  {% else %} {% endif %}
+</div>
+{% endblock body %}
