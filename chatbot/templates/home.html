@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body  {
+
+  background-color: #cccccc;
+}
+
+
+.button {
+  background-color: #0020C2;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+
+.button5 {font-size: 24px;}
+</style>
+</head>
+<body>
+<center>
+    <br/>
+    <br/>
+    <br/>
+    <h1><a href="{% url 'home' %}"></a> </h1>
+    <br/>
+    <br/><h2>Hi, I am Guru from Aurdo, Please state your name to continue</h2>
+    <br/>
+    <br/>
+    <br/>
+<form method="post" action="/chatbot/submit/">
+    {% csrf_token %}
+<input type="hidden" name="record">
+<button type="submit" class="button button5">Speak</button>
+</form>
+<br/>
+<br/>
+<br/>
+    <h1 style="color:red;"> {{data}}</h1>
+    <pre><h1 style="color:green;">{{data2}}</h1></pre>
+    </center>
+</body>
+</html>
